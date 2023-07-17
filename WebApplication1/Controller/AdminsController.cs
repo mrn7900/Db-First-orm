@@ -10,9 +10,13 @@ namespace WebApplication1.Controller
     [ApiController]
     public class AdminsController : ControllerBase
     {
+       
+        private readonly ILogger<AdminsController> _logger;
         private readonly testContext _Context;
-        public AdminsController(testContext context)
+        public AdminsController(testContext context , ILogger<AdminsController> logger)
         {
+            _logger = logger;
+            _logger.LogDebug(1, "NLog injected into AdminController");
             _Context = context;
         }
         [HttpGet]
