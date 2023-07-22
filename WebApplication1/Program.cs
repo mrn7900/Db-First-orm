@@ -3,6 +3,7 @@ using NLog.Web;
 using NLog;
 using WebApplication1.Models;
 
+//for NLog, use the main docs and dont copy try catch from doc(write it by yourself to work normaly)
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
 try
@@ -19,9 +20,10 @@ try
     //  new MySqlConnection("Server=127.0.0.1;Port=3306;Database=test;Uid=root;Pwd=12345678;"));
 
     //change packages to danial project
-
+    //first have to install pomelo packages,then scafold.after scafolding with pomelo,it dosent work in API so need to delete pomelos and install microssft Core packages
+    //then chenge context and program.cs(DI) to working with microsoft pakcages 
     builder.Services.AddDbContext<testContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("db")));
-
+    //add DI of NLog
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
 

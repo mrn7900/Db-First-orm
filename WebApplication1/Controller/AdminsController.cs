@@ -3,14 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
+//Read IConfiguratio
+//https://www.youtube.com/watch?v=UiqTDvIFJ3g
 namespace WebApplication1.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AdminsController : ControllerBase
     {
-       
+       //add NLog and context
         private readonly ILogger<AdminsController> _logger;
         private readonly testContext _Context;
         public AdminsController(testContext context , ILogger<AdminsController> logger)
