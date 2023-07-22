@@ -3,6 +3,7 @@ using NLog.Web;
 using NLog;
 using WebApplication1.Models;
 
+
 //for NLog, use the main docs and dont copy try catch from doc(write it by yourself to work normaly)
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");

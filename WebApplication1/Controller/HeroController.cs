@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI;
+using WebApplication1.Models;
 
 //Api docs
 //https://superheroapi.com/?ref=apilist.fun
@@ -10,13 +12,19 @@ namespace WebApplication1.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MyApiController : ControllerBase
+    public class HeroController : ControllerBase
     {
+        //add NLog and context
+        private readonly ILogger<AdminsController> _logger;
         private readonly HttpClient _httpClient;
+        private readonly testContext _Context;
 
-        public MyApiController(HttpClient httpClient)
+        public HeroController(HttpClient httpClient, testContext context, ILogger<AdminsController> logger)
         {
+            _logger = logger;
+            _logger.LogDebug(1, "NLog injected into AdminController");
             _httpClient = httpClient;
+            _Context = context;
         }
 
         [HttpGet]
@@ -26,16 +34,18 @@ namespace WebApplication1.Controller
             var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/1/biography");
            
 
-
+            
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                // Process the response content
+               
                 return Ok(content);
+                
             }
 
-            // Handle unsuccessful response
             return BadRequest();
         }
+        
+
     }
 }

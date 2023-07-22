@@ -18,6 +18,7 @@ namespace WebApplication1.Models
         }
 
         public virtual DbSet<Admin> Admins { get; set; }
+        public virtual DbSet<Herobio> Herobios { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,7 +31,8 @@ namespace WebApplication1.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+            modelBuilder.HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_0900_ai_ci");
 
             modelBuilder.Entity<Admin>(entity =>
             {
@@ -45,6 +47,47 @@ namespace WebApplication1.Models
                 entity.Property(e => e.Username)
                     .HasMaxLength(45)
                     .HasColumnName("username");
+            });
+
+            modelBuilder.Entity<Herobio>(entity =>
+            {
+                entity.ToTable("herobio");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Aliases)
+                    .HasMaxLength(45)
+                    .HasColumnName("aliases");
+
+                entity.Property(e => e.Alignment)
+                    .HasMaxLength(45)
+                    .HasColumnName("alignment");
+
+                entity.Property(e => e.AlterEgos)
+                    .HasMaxLength(45)
+                    .HasColumnName("alter-egos");
+
+                entity.Property(e => e.FirstAppearance)
+                    .HasMaxLength(45)
+                    .HasColumnName("first-appearance");
+
+                entity.Property(e => e.Fullname)
+                    .HasMaxLength(45)
+                    .HasColumnName("fullname");
+
+                entity.Property(e => e.Heroid).HasColumnName("heroid");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(45)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.PlaceOfBirth)
+                    .HasMaxLength(45)
+                    .HasColumnName("place-of-birth");
+
+                entity.Property(e => e.Publisher)
+                    .HasMaxLength(45)
+                    .HasColumnName("publisher");
             });
 
             OnModelCreatingPartial(modelBuilder);

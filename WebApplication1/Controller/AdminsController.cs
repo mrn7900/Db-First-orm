@@ -11,10 +11,10 @@ namespace WebApplication1.Controller
     [ApiController]
     public class AdminsController : ControllerBase
     {
-       //add NLog and context
+        //add NLog and context
         private readonly ILogger<AdminsController> _logger;
         private readonly testContext _Context;
-        public AdminsController(testContext context , ILogger<AdminsController> logger)
+        public AdminsController(testContext context, ILogger<AdminsController> logger)
         {
             _logger = logger;
             _logger.LogDebug(1, "NLog injected into AdminController");
@@ -48,8 +48,8 @@ namespace WebApplication1.Controller
             var dbHero = await _Context.Admins.FindAsync(Req.Id);
             if (dbHero == null)
                 return NotFound();
-            dbHero.Username= Req.Username;
-            dbHero.City= Req.City;
+            dbHero.Username = Req.Username;
+            dbHero.City = Req.City;
 
 
 
@@ -67,6 +67,7 @@ namespace WebApplication1.Controller
             await _Context.SaveChangesAsync();
             return Ok(await _Context.Admins.ToListAsync());
         }
-    
+
     }
 }
+
