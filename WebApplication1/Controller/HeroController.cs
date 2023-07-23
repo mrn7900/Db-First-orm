@@ -1,51 +1,47 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MySqlX.XDevAPI;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
-//Api docs
-//https://superheroapi.com/?ref=apilist.fun
-//Api acess token
-//956111282311222
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace WebApplication1.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class HeroController : ControllerBase
     {
-        //add NLog and context
-        private readonly ILogger<AdminsController> _logger;
-        private readonly HttpClient _httpClient;
-        private readonly testContext _Context;
-
-        public HeroController(HttpClient httpClient, testContext context, ILogger<AdminsController> logger)
+        private readonly HeroService _heroService;
+        public HeroController(HeroService heroService)
         {
-            _logger = logger;
-            _logger.LogDebug(1, "NLog injected into AdminController");
-            _httpClient = httpClient;
-            _Context = context;
+            _heroService = heroService;
         }
-
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Herobio>> GetHero(int id)
+        {
+            return Ok(await _heroService.GetHero(id));
+        }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<Herobio>>> Get()
         {
-            // Make an HTTP GET request to the API
-            var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/1/biography");
-           
-
-            
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-               
-                return Ok(content);
-                
-            }
-
-            return BadRequest();
+            return Ok(_heroService.Get());
         }
-        
-
+        /*[HttpPost]
+        public async Task<ActionResult<List<Herobio>>> Post(Herobio Hero)
+        {
+            _heroService.(Hero);
+            await _Context.SaveChangesAsync();
+            return Ok(await _Context.Admins.ToListAsync());
+        }*/
+        [HttpPut]
+        public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
+        {
+            return Ok(_heroService.Update(Req));
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Herobio>>> Delete(int id)
+        {
+           
+            return Ok(_heroService.Delete(id));
+        }
     }
 }

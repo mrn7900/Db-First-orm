@@ -34,14 +34,12 @@ namespace WebApplication1.Repos
 
         public async IAsyncEnumerable<Herobio> GetHeroTbl(int id)
         {
-            /*var hero = _hero.Where(x => x.Id == id).FirstOrDefault();
-            return hero;*/
             var hero = await _context.Herobios.FindAsync(id);
-            var notfound = "notfound";
+         /*   var notfound = "notfound";
             if (hero == null)
             {
                 //yield return notfound;
-            }
+            }*/
             yield return await Task.FromResult(hero);
         }
 

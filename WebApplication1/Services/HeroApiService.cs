@@ -18,8 +18,9 @@ namespace WebApplication1.Services
             var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/1/biography");
 
             var content = await response.Content.ReadAsStringAsync();
+           
             var myheroObj = JsonConvert.DeserializeObject<Herobio>(content);
-
+           
 
 /*            if (response.IsSuccessStatusCode)
             {
@@ -29,6 +30,9 @@ namespace WebApplication1.Services
               
             }*/
             return myheroObj;
+           
         }
+       
+  
     }
 }
