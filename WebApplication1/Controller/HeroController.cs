@@ -10,8 +10,8 @@ namespace WebApplication1.Controller
     [ApiController]
     public class HeroController : ControllerBase
     {
-        private readonly HeroService _heroService;
-        public HeroController(HeroService heroService)
+        private readonly IHeroService _heroService;
+        public HeroController(IHeroService heroService)
         {
             _heroService = heroService;
         }
@@ -25,7 +25,7 @@ namespace WebApplication1.Controller
         {
             return Ok(_heroService.Get());
         }
-        /*[HttpPost]
+     /*   [HttpPost]
         public async Task<ActionResult<List<Herobio>>> Post(Herobio Hero)
         {
             _heroService.(Hero);
@@ -35,12 +35,15 @@ namespace WebApplication1.Controller
         [HttpPut]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
-            return Ok(_heroService.Update(Req));
+            if (Req != null)
+                return Ok(_heroService.Update(Req));
+            else
+                return NotFound();
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {
-           
+
             return Ok(_heroService.Delete(id));
         }
     }

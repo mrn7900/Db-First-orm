@@ -4,9 +4,9 @@ namespace WebApplication1.Services
 {
     public interface IHeroService
     {
-        public Task<bool> GetHero(int id);
-        public Task Get();
+        public Task<Herobio> GetHero(int id);
+        public Task<List<Herobio>> Get();
         public Task Delete(int id);
-        public Task Update(Herobio hero);
+        public Task<List<Herobio>> Update(Herobio hero);
     }
 }

@@ -27,8 +27,9 @@ try
     //then chenge context and program.cs(DI) to working with microsoft pakcages 
     builder.Services.AddDbContext<testContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("db")));
     builder.Services.AddScoped<IHeroApiService, HeroApiService>();
+    builder.Services.AddScoped<IHeroService, HeroService>();
     builder.Services.AddScoped<IHeroRepo, HeroRepo>();
-    builder.Services.AddScoped<IHeroService , HeroService>();
+    
     //add DI of NLog
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();

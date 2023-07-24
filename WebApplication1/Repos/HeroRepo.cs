@@ -7,7 +7,7 @@ namespace WebApplication1.Repos
     {
         private readonly testContext _context;
 
-        
+
         public HeroRepo(testContext context)
         {
             _context = context;
@@ -20,27 +20,23 @@ namespace WebApplication1.Repos
 
         public async void DeleteHero(int id)
         {
-            /*var hero = await _context.FindAsync(id);
+          /*  var hero = await _context.FindAsync(id);
             if (hero > -1)
             {
                 _hero.RemoveAt(hero);
             }*/
             var dbHero = await _context.Herobios.FindAsync(id);
             if (dbHero != null)
-            _context.Herobios.Remove(dbHero);
+                _context.Herobios.Remove(dbHero);
             await _context.SaveChangesAsync();
-            
+
         }
 
-        public async IAsyncEnumerable<Herobio> GetHeroTbl(int id)
+        public async Task<Herobio> GetHeroTbl(int id)
         {
             var hero = await _context.Herobios.FindAsync(id);
-         /*   var notfound = "notfound";
-            if (hero == null)
-            {
-                //yield return notfound;
-            }*/
-            yield return await Task.FromResult(hero);
+            return hero;
+
         }
 
         public async Task<List<Herobio>> GetHeros()
@@ -51,24 +47,35 @@ namespace WebApplication1.Repos
         public async Task<List<Herobio>> Update(Herobio Req)
         {
             var dbHero = await _context.Herobios.FindAsync(Req.Id);
+            if (dbHero != null)
+            {
+                dbHero.Id = Req.Id;
+                dbHero.Name = Req.Name;
+                dbHero.Aliases = Req.Aliases;
+                dbHero.FirstAppearance = Req.FirstAppearance;
+                dbHero.PlaceOfBirth = Req.PlaceOfBirth;
+                dbHero.Fullname = Req.Fullname;
+                dbHero.Publisher = Req.Publisher;
+                dbHero.Alignment = Req.Alignment;
+                dbHero.AlterEgos = Req.AlterEgos;
 
-            dbHero.Name = Req.Name;
-            dbHero.Aliases = Req.Aliases;
-            dbHero.FirstAppearance = Req.FirstAppearance;
-            dbHero.PlaceOfBirth = Req.PlaceOfBirth;
-            dbHero.Fullname = Req.Fullname;
-            dbHero.Publisher = Req.Publisher;
-            dbHero.Alignment= Req.Publisher;
+                await _context.SaveChangesAsync();
+                return await _context.Herobios.ToListAsync();
+            }
+            else
+            {
+                return null;
+            }
 
-            await _context.SaveChangesAsync();
 
-            return await _context.Herobios.ToListAsync();
 
-            /*var Hero = _hero.FindIndex(x => x.Id == id);
+
+          /*  var Hero = _hero.FindIndex(x => x.Id == id);
             if (Hero > -1)
             {
                 _hero[Hero] = hero;
             }*/
         }
+
     }
 }

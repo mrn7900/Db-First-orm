@@ -32,20 +32,20 @@ namespace WebApplication1.Controller
         {
             // Make an HTTP GET request to the API
             var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/1/biography");
-           
 
-            
+
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-               
+
                 return Ok(content);
-                
+
             }
 
             return BadRequest();
         }
-        
+
 
     }
 }

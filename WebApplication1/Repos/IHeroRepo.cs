@@ -8,7 +8,7 @@ namespace WebApplication1.Repos
 
         public void DeleteHero(int id);
 
-        public IAsyncEnumerable<Herobio> GetHeroTbl(int id);
+        public Task<Herobio> GetHeroTbl(int id);
 
         public Task<List<Herobio>> GetHeros();
 

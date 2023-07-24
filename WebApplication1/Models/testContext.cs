@@ -53,10 +53,12 @@ namespace WebApplication1.Models
             {
                 entity.ToTable("herobio");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
 
                 entity.Property(e => e.Aliases)
-                    .HasMaxLength(45)
+                    .HasColumnType("json")
                     .HasColumnName("aliases");
 
                 entity.Property(e => e.Alignment)
@@ -74,8 +76,6 @@ namespace WebApplication1.Models
                 entity.Property(e => e.Fullname)
                     .HasMaxLength(45)
                     .HasColumnName("fullname");
-
-                entity.Property(e => e.Heroid).HasColumnName("heroid");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(45)

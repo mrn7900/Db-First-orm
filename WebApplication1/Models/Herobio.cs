@@ -8,7 +8,6 @@ namespace WebApplication1.Models
     public partial class Herobio
     {
         public int Id { get; set; }
-        public int? Heroid { get; set; }
         public string Name { get; set; }
         public string Fullname { get; set; }
         public string AlterEgos { get; set; }
