@@ -5,5 +5,6 @@ namespace WebApplication1.Services
     public interface IHeroApiService
     {
         public Task<Herobio> Get();
+        public int userid { get; set; }
     }
 }

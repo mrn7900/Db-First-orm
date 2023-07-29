@@ -29,6 +29,7 @@ try
     builder.Services.AddScoped<IHeroApiService, HeroApiService>();
     builder.Services.AddScoped<IHeroService, HeroService>();
     builder.Services.AddScoped<IHeroRepo, HeroRepo>();
+   
     
     //add DI of NLog
     builder.Logging.ClearProviders();

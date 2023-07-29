@@ -18,9 +18,11 @@ namespace WebApplication1.Services
             var res = _heroRepo.GetHeroTbl(id);
             if (res.Result == null)
             {
+                _heroApiService.userid = id;
                 var ApiTbl = await _heroApiService.Get();
                 _heroRepo.CreateHero(ApiTbl);
-                return await res;
+                var show = _heroRepo.GetHeroTbl(id);
+                return await show;
             }
             return await res;
 

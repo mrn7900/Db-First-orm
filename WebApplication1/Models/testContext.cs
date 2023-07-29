@@ -53,7 +53,7 @@ namespace WebApplication1.Models
             {
                 entity.ToTable("herobio");
 
-                entity.Property(e => e.Id)
+                entity.Property(e => e.id)
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
@@ -61,31 +61,31 @@ namespace WebApplication1.Models
                     .HasColumnType("json")
                     .HasColumnName("aliases")*/;
 
-                entity.Property(e => e.Alignment)
+                entity.Property(e => e.alignment)
                     .HasMaxLength(45)
                     .HasColumnName("alignment");
 
-                entity.Property(e => e.AlterEgos)
+                entity.Property(e => e.alteregos)
                     .HasMaxLength(45)
                     .HasColumnName("alter-egos");
 
-                entity.Property(e => e.FirstAppearance)
+                entity.Property(e => e.firstappearance)
                     .HasMaxLength(45)
                     .HasColumnName("first-appearance");
 
-                entity.Property(e => e.Fullname)
+                entity.Property(e => e.fullname)
                     .HasMaxLength(45)
                     .HasColumnName("fullname");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.name)
                     .HasMaxLength(45)
                     .HasColumnName("name");
 
-                entity.Property(e => e.PlaceOfBirth)
+                entity.Property(e => e.placeofbirth)
                     .HasMaxLength(45)
                     .HasColumnName("place-of-birth");
 
-                entity.Property(e => e.Publisher)
+                entity.Property(e => e.publisher)
                     .HasMaxLength(45)
                     .HasColumnName("publisher");
             });

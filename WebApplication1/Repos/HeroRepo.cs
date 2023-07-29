@@ -50,18 +50,18 @@ namespace WebApplication1.Repos
 
         public async Task<List<Herobio>> Update(Herobio Req)
         {
-            var dbHero = await _context.Herobios.FindAsync(Req.Id);
+            var dbHero = await _context.Herobios.FindAsync(Req.id);
             if (dbHero != null)
             {
-                dbHero.Id = Req.Id;
-                dbHero.Name = Req.Name;
+                dbHero.id = Req.id;
+                dbHero.name = Req.name;
                 //dbHero.Aliases = Req.Aliases;
-                dbHero.FirstAppearance = Req.FirstAppearance;
-                dbHero.PlaceOfBirth = Req.PlaceOfBirth;
-                dbHero.Fullname = Req.Fullname;
-                dbHero.Publisher = Req.Publisher;
-                dbHero.Alignment = Req.Alignment;
-                dbHero.AlterEgos = Req.AlterEgos;
+                dbHero.firstappearance = Req.firstappearance;
+                dbHero.placeofbirth = Req.placeofbirth;
+                dbHero.fullname = Req.fullname;
+                dbHero.publisher = Req.publisher;
+                dbHero.alignment = Req.alignment;
+                dbHero.alteregos = Req.alteregos;
 
                 await _context.SaveChangesAsync();
                 return await _context.Herobios.ToListAsync();
