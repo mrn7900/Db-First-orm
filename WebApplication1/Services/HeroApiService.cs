@@ -32,16 +32,7 @@ namespace WebApplication1.Services
 
             var myheroObj = JsonConvert.DeserializeObject<Herobio>(content);
             
-            //var alies = myheroObj.Aliases.
-
-
-         /*   if (response.IsSuccessStatusCode)
-            {
-
-
-                return myjson;
-
-            }*/
+          
             return myheroObj;
 
         }

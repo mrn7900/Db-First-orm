@@ -18,17 +18,12 @@ namespace WebApplication1.Repos
         {
             _context.Herobios.Add(hero);
             await _context.SaveChangesAsync();
-           // return Ok(await _context.Herobios.ToListAsync());
             
         }
 
         public async void DeleteHero(int id)
         {
-          /*  var hero = await _context.FindAsync(id);
-            if (hero > -1)
-            {
-                _hero.RemoveAt(hero);
-            }*/
+          
             var dbHero = await _context.Herobios.FindAsync(id);
             if (dbHero != null)
                 _context.Herobios.Remove(dbHero);
@@ -71,14 +66,6 @@ namespace WebApplication1.Repos
                 return null;
             }
 
-
-
-
-          /*  var Hero = _hero.FindIndex(x => x.Id == id);
-            if (Hero > -1)
-            {
-                _hero[Hero] = hero;
-            }*/
         }
 
     }

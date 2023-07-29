@@ -18,37 +18,52 @@ namespace WebApplication1.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<Herobio>> GetHero(int id)
         {
-            return Ok(await _heroService.GetHero(id));
+            //The method will search db, if there was requested data it will return it else it will use incoming Api to get and set data in database
+            var res = await _heroService.GetHero(id);
+                if(res == null)
+                return NotFound();
+                 else
+                return Ok(res);
+
         }
         [HttpGet]
         public async Task<ActionResult<List<Herobio>>> Get()
-        {
+        {   
             return Ok(_heroService.Get());
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Herobio>>> Post(Herobio Hero)
         {
-            _heroService.Create(Hero);
-            return Ok(_heroService.Get());
-            /*_heroService.(Hero);
-            await _Context.SaveChangesAsync();
-            return Ok(await _Context.Admins.ToListAsync());*/
+            //This method will add new data in database if there wont be any same data(by checking the id)
+            var userid = await _heroService.GetHeroDB(Hero.id);
+            if (userid == null)
+            {
+                _heroService.Create(Hero);
+                return Ok(_heroService.Get());
+            }
+            else
+                return BadRequest();
+
         }
 
         [HttpPut]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
-            if (Req != null)
-                return Ok(_heroService.Update(Req));
-            else
+            var res = _heroService.Update(Req);
+            if (res == null)
                 return NotFound();
+            else
+                return Ok(res);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {
-
-            return Ok(_heroService.Delete(id));
+            var res = _heroService.Delete(id);
+            if (res == null)
+                return NotFound();
+            else
+            return Ok(_heroService.Get());
         }
     }
 }
