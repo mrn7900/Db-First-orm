@@ -25,13 +25,17 @@ namespace WebApplication1.Controller
         {
             return Ok(_heroService.Get());
         }
-     /*   [HttpPost]
+
+        [HttpPost]
         public async Task<ActionResult<List<Herobio>>> Post(Herobio Hero)
         {
-            _heroService.(Hero);
+            _heroService.Create(Hero);
+            return Ok(_heroService.Get());
+            /*_heroService.(Hero);
             await _Context.SaveChangesAsync();
-            return Ok(await _Context.Admins.ToListAsync());
-        }*/
+            return Ok(await _Context.Admins.ToListAsync());*/
+        }
+
         [HttpPut]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
