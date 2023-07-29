@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public string Fullname { get; set; }
         public string AlterEgos { get; set; }
-        public string Aliases { get; set; }
+        //public string Aliases { get; set; }
         public string PlaceOfBirth { get; set; }
         public string FirstAppearance { get; set; }
         public string Publisher { get; set; }

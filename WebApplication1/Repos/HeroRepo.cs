@@ -51,7 +51,7 @@ namespace WebApplication1.Repos
             {
                 dbHero.Id = Req.Id;
                 dbHero.Name = Req.Name;
-                dbHero.Aliases = Req.Aliases;
+                //dbHero.Aliases = Req.Aliases;
                 dbHero.FirstAppearance = Req.FirstAppearance;
                 dbHero.PlaceOfBirth = Req.PlaceOfBirth;
                 dbHero.Fullname = Req.Fullname;

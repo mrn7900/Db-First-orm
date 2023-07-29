@@ -20,7 +20,7 @@ namespace WebApplication1.Services
             {
                 var ApiTbl = await _heroApiService.Get();
                 _heroRepo.CreateHero(ApiTbl);
-                return null;
+                return await res;
             }
             return await res;
 

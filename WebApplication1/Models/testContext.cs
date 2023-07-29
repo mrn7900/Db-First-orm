@@ -57,9 +57,9 @@ namespace WebApplication1.Models
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
-                entity.Property(e => e.Aliases)
+              /*  entity.Property(e => e.Aliases)
                     .HasColumnType("json")
-                    .HasColumnName("aliases");
+                    .HasColumnName("aliases")*/;
 
                 entity.Property(e => e.Alignment)
                     .HasMaxLength(45)
