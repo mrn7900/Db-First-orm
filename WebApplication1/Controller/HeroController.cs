@@ -51,7 +51,7 @@ namespace WebApplication1.Controller
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
             var res = _heroService.Update(Req);
-            if (res == null)
+            if (res.Result == null)
                 return NotFound();
             else
                 return Ok(res);
