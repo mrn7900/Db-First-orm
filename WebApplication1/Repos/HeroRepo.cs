@@ -6,6 +6,7 @@ namespace WebApplication1.Repos
 {
     public class HeroRepo : IHeroRepo
     {
+
         private readonly testContext _context;
 
 
@@ -14,11 +15,25 @@ namespace WebApplication1.Repos
             _context = context;
         }
 
+        public string exeption{ get; set; }
         public async void CreateHero(Herobio hero)
         {
+            //add try catch
+            /*try
+            {
+                _context.Herobios.Add(hero);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                exeption = ex.Message;
+            }*/
+
             _context.Herobios.Add(hero);
             await _context.SaveChangesAsync();
-            
+
+
         }
 
         public async void DeleteHero(int id)

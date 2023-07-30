@@ -6,15 +6,18 @@ using WebApplication1.Services;
 
 namespace WebApplication1.Controller
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class HeroController : ControllerBase
     {
+
         private readonly IHeroService _heroService;
         public HeroController(IHeroService heroService)
         {
             _heroService = heroService;
         }
+       
         [HttpGet("{id}")]
         public async Task<ActionResult<Herobio>> GetHero(int id)
         {
@@ -26,6 +29,7 @@ namespace WebApplication1.Controller
                 return Ok(res);
 
         }
+        
         [HttpGet]
         public async Task<ActionResult<List<Herobio>>> Get()
         {   
@@ -43,7 +47,7 @@ namespace WebApplication1.Controller
                 return Ok(_heroService.Get());
             }
             else
-                return BadRequest();
+                return BadRequest("Doublicate Enterance(check id)");
 
         }
 
@@ -56,6 +60,7 @@ namespace WebApplication1.Controller
             else
                 return Ok(res);
         }
+      
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {

@@ -11,14 +11,9 @@ namespace WebApplication1.Services
         public HeroApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            
 
         }
-      /*  public int userid(int id)
-        {
-            int userid = id;
-            return userid;
-        }*/
+     
         public int userid { get; set; }
 
         public async Task<Herobio> Get()

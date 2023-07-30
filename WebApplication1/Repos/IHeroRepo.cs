@@ -5,6 +5,7 @@ namespace WebApplication1.Repos
     public interface IHeroRepo
     {
         public void CreateHero(Herobio hero);
+        public string exeption { get; set; }
 
         public void DeleteHero(int id);
 
