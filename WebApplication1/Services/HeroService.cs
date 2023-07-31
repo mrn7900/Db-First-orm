@@ -16,11 +16,10 @@ namespace WebApplication1.Services
             _heroRepo = heroRepo;
             _methodResult = methodResult;
         }
-
-        /*public async Task<Herobio> GetHero(int id)*/
+        //IMethodResult service will return a Object and a string(for error) 
         public async Task<IMethodResult> GetHero(int id)
         {
-            //The method will search db, if there was requested data it will return it else it will use incoming Api to get and set data in database
+            //The method will search db, if there was requested (by Id) data it will return it else it will use incoming Api to get and set data in database
             var res = _heroRepo.GetHeroTbl(id);
             _methodResult.Result = res;
             if (res.Result == null)
@@ -36,11 +35,6 @@ namespace WebApplication1.Services
                 }
                 else
                 {
-              /*      _heroRepo.CreateHero(ApiTbl);
-                    var show = _heroRepo.GetHeroTbl(id);
-                    _methodResult.Result = show;
-                    return _methodResult;
-*/
                     //control try catch
                     _heroRepo.CreateHero(ApiTbl);
                     var ex = _heroRepo.exeption;
@@ -54,35 +48,44 @@ namespace WebApplication1.Services
 
                         _methodResult.Errors = ex;
                     return _methodResult;
-
                 }
-
             }
             return _methodResult;
+        }
 
-            //---------------------------------------------------------------------------
-            /*
-                        var res = _heroRepo.GetHeroTbl(id);
-                        if (res.Result == null)
-                        {
-                            _heroApiService.userid = id;
-                            var ApiTbl = await _heroApiService.Get();
-                            if (ApiTbl.id == 0)
-                            {
-                                var show = _heroRepo.GetHeroTbl(id);
-                                return await show;
-                            }
-                            else
-                            {
-                                _heroRepo.CreateHero(ApiTbl);
-                                var show = _heroRepo.GetHeroTbl(id);
-                                return await show;
+        public async Task<IMethodResult> GetByName(string name)
+        {
+            var res = _heroRepo.GetHeroName(name);
+            _methodResult.Result = res;
+            if (res.Result == null)
+            {
+                _heroApiService.username = name;
+                var ApiTbl = await _heroApiService.Get();
+                if (ApiTbl.id == 0)
+                {
+                    var show = _heroRepo.GetHeroName(name);
+                    _methodResult.Result = show;
+                    return _methodResult;
 
+                }
+                else
+                {
+                    //control try catch
+                    _heroRepo.CreateHero(ApiTbl);
+                    var ex = _heroRepo.exeption;
+                    if (ex == null)
+                    {
+                        var show1 = _heroRepo.GetHeroName(name);
+                        _methodResult.Result = show1;
+                        return _methodResult;
+                    }
+                    else
 
-                            }
-
-                        }
-                        return await res;*/
+                        _methodResult.Errors = ex;
+                    return _methodResult;
+                }
+            }
+            return _methodResult;
         }
        
         public async Task<Herobio> GetHeroDB(int id)
@@ -115,8 +118,6 @@ namespace WebApplication1.Services
                 _heroRepo.DeleteHero(id);
                 return _heroRepo.GetHeroTbl(id);
             }
-            
-
         }
         
         public async Task GetHeros()

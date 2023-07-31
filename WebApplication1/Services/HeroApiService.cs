@@ -16,6 +16,8 @@ namespace WebApplication1.Services
      
         public int userid { get; set; }
 
+        public string username { get; set; }
+
         public async Task<Herobio> Get()
         {
             int incomingid = this.userid;

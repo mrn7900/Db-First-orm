@@ -11,6 +11,8 @@ namespace WebApplication1.Repos
 
         public Task<Herobio> GetHeroTbl(int id);
 
+        public  Task<List<Herobio>> GetHeroName(string name);
+        
         public Task<List<Herobio>> GetHeros();
 
         public Task<List<Herobio>> Update(Herobio Req);

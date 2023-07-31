@@ -8,6 +8,7 @@ namespace WebApplication1.Services
         public Task Create(Herobio hero);
         /*        public Task<Herobio> GetHero(int id);*/
         public Task<IMethodResult> GetHero(int id);
+        public Task<IMethodResult> GetByName(string name);
         public Task<Herobio> GetHeroDB(int id);
         public Task<List<Herobio>> Get();
         public Task Delete(int id);

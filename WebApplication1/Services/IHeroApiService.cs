@@ -6,5 +6,7 @@ namespace WebApplication1.Services
     {
         public Task<Herobio> Get();
         public int userid { get; set; }
+
+        public string username { get; set; }
     }
 }

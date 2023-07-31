@@ -16,6 +16,7 @@ namespace WebApplication1.Repos
         }
 
         public string exeption{ get; set; }
+      
         public async void CreateHero(Herobio hero)
         {
             //add try catch
@@ -29,21 +30,6 @@ namespace WebApplication1.Repos
 
                 exeption = ex.Message;
             }
-
-            /*_context.Herobios.Add(hero);
-            _context.SaveChangesAsync();*/
-
-
-        }
-
-        public async void DeleteHero(int id)
-        {
-          
-            var dbHero = await _context.Herobios.FindAsync(id);
-            if (dbHero != null)
-                _context.Herobios.Remove(dbHero);
-            await _context.SaveChangesAsync();
-
         }
 
         public async Task<Herobio> GetHeroTbl(int id)
@@ -51,6 +37,16 @@ namespace WebApplication1.Repos
             var hero = await _context.Herobios.FindAsync(id);
             return hero;
 
+        }
+      
+        public async Task<List<Herobio>> GetHeroName(string name)
+        {
+            
+
+            var hero = await _context.Herobios.Where(x => x.name == name).ToListAsync();
+
+            /*var hero = await _context.Herobios.FindAsync(name);*/
+            return hero;
         }
 
         public async Task<List<Herobio>> GetHeros()
@@ -80,6 +76,16 @@ namespace WebApplication1.Repos
             {
                 return null;
             }
+
+        }
+       
+        public async void DeleteHero(int id)
+        {
+
+            var dbHero = await _context.Herobios.FindAsync(id);
+            if (dbHero != null)
+                _context.Herobios.Remove(dbHero);
+            await _context.SaveChangesAsync();
 
         }
 
