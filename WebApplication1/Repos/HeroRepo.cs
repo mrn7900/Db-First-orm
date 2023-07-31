@@ -19,19 +19,19 @@ namespace WebApplication1.Repos
         public async void CreateHero(Herobio hero)
         {
             //add try catch
-            /*try
+            try
             {
                 _context.Herobios.Add(hero);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
 
                 exeption = ex.Message;
-            }*/
+            }
 
-            _context.Herobios.Add(hero);
-            await _context.SaveChangesAsync();
+            /*_context.Herobios.Add(hero);
+            _context.SaveChangesAsync();*/
 
 
         }

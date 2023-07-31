@@ -1,5 +1,6 @@
 ﻿
 using WebApplication1.Models;
+using WebApplication1.Properties;
 using WebApplication1.Repos;
 
 namespace WebApplication1.Services
@@ -8,47 +9,80 @@ namespace WebApplication1.Services
     {
         private readonly IHeroApiService _heroApiService;
         private readonly IHeroRepo _heroRepo;
-        public HeroService(IHeroRepo heroRepo, IHeroApiService heroApiService)
+        private readonly IMethodResult _methodResult;
+        public HeroService(IHeroRepo heroRepo, IHeroApiService heroApiService , IMethodResult methodResult)
         {
             _heroApiService = heroApiService;
             _heroRepo = heroRepo;
+            _methodResult = methodResult;
         }
-        
-        public async Task<Herobio> GetHero(int id)
+
+        /*public async Task<Herobio> GetHero(int id)*/
+        public async Task<IMethodResult> GetHero(int id)
         {
             //The method will search db, if there was requested data it will return it else it will use incoming Api to get and set data in database
             var res = _heroRepo.GetHeroTbl(id);
+            _methodResult.Result = res;
             if (res.Result == null)
             {
                 _heroApiService.userid = id;
                 var ApiTbl = await _heroApiService.Get();
-                if(ApiTbl.id == 0)
+                if (ApiTbl.id == 0)
                 {
                     var show = _heroRepo.GetHeroTbl(id);
-                    return await show;
+                    _methodResult.Result = show;
+                    return _methodResult;
+                    
                 }
                 else
                 {
-                    _heroRepo.CreateHero(ApiTbl);
+              /*      _heroRepo.CreateHero(ApiTbl);
                     var show = _heroRepo.GetHeroTbl(id);
-                    return await show;
-
+                    _methodResult.Result = show;
+                    return _methodResult;
+*/
                     //control try catch
-                    /*  _heroRepo.CreateHero(ApiTbl);
-                      var ex = _heroRepo.exeption;
-                      if (ex == null)
-                      {
-                          var show = _heroRepo.GetHeroTbl(id);
-                          return await show;
-                      }
-                      else
+                    _heroRepo.CreateHero(ApiTbl);
+                    var ex = _heroRepo.exeption;
+                    if (ex == null)
+                    {
+                        var show1 = _heroRepo.GetHeroTbl(id);
+                        _methodResult.Result = show1;
+                        return _methodResult;
+                    }
+                    else
 
-                          return  ex;*/
-                    
-                } 
-                
+                        _methodResult.Errors = ex;
+                    return _methodResult;
+
+                }
+
             }
-            return await res;
+            return _methodResult;
+
+            //---------------------------------------------------------------------------
+            /*
+                        var res = _heroRepo.GetHeroTbl(id);
+                        if (res.Result == null)
+                        {
+                            _heroApiService.userid = id;
+                            var ApiTbl = await _heroApiService.Get();
+                            if (ApiTbl.id == 0)
+                            {
+                                var show = _heroRepo.GetHeroTbl(id);
+                                return await show;
+                            }
+                            else
+                            {
+                                _heroRepo.CreateHero(ApiTbl);
+                                var show = _heroRepo.GetHeroTbl(id);
+                                return await show;
+
+
+                            }
+
+                        }
+                        return await res;*/
         }
        
         public async Task<Herobio> GetHeroDB(int id)

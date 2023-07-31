@@ -4,6 +4,7 @@ using NLog;
 using WebApplication1.Models;
 using WebApplication1.Services;
 using WebApplication1.Repos;
+using WebApplication1.Properties;
 
 
 //for NLog, use the main docs and dont copy try catch from doc(write it by yourself to work normaly)
@@ -29,6 +30,7 @@ try
     builder.Services.AddScoped<IHeroApiService, HeroApiService>();
     builder.Services.AddScoped<IHeroService, HeroService>();
     builder.Services.AddScoped<IHeroRepo, HeroRepo>();
+    builder.Services.AddScoped<IMethodResult, MethodResult>();
    
     
     //add DI of NLog
