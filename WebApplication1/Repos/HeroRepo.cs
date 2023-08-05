@@ -41,11 +41,11 @@ namespace WebApplication1.Repos
       
         public async Task<List<Herobio>> GetHeroName(string name)
         {
-            
+
 
             var hero = await _context.Herobios.Where(x => x.name == name).ToListAsync();
 
-            /*var hero = await _context.Herobios.FindAsync(name);*/
+          
             return hero;
         }
 

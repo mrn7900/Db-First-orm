@@ -23,7 +23,7 @@ namespace WebApplication1.Controller
         {
             //The method will search db by id, if there was requested data it will return it else it will use incoming Api to get and set data in database
             var res = await _heroService.GetHero(id);
-                if(res == null)
+                if(res.Result == null)
                 return NotFound();
                  else
                 return Ok(res);
