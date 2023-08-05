@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Caching.Distributed;
 using WebApplication1.Models;
 using WebApplication1.Properties;
 using WebApplication1.Repos;
@@ -10,11 +11,13 @@ namespace WebApplication1.Services
         private readonly IHeroApiService _heroApiService;
         private readonly IHeroRepo _heroRepo;
         private readonly IMethodResult _methodResult;
-        public HeroService(IHeroRepo heroRepo, IHeroApiService heroApiService , IMethodResult methodResult)
+        private readonly IDistributedCache _cache;
+        public HeroService(IHeroRepo heroRepo, IHeroApiService heroApiService , IMethodResult methodResult , IDistributedCache cache)
         {
             _heroApiService = heroApiService;
             _heroRepo = heroRepo;
             _methodResult = methodResult;
+            _cache = cache;
         }
         //IMethodResult service will return a Object and a string(for error) 
         public async Task<IMethodResult> GetHero(int id)
@@ -103,9 +106,26 @@ namespace WebApplication1.Services
             return await show;
         }
         
-        public async Task<List<Herobio>> Get()
+/*        public async Task<List<Herobio>> Get()*/
+        public async Task<IMethodResult> Get()
         {
-            return await _heroRepo.GetHeros();
+            //first checking if cached data exist 
+            string cacheKey = "HeroTable";
+            var cachedData = await _cache.GetStringAsync(cacheKey);
+            if (cachedData != null)
+            {
+                _methodResult.Result = cachedData;
+                return _methodResult;
+            }
+            var data = await _heroRepo.GetHeros();
+            string stres = String.Join(",", data);
+            // Store data in cache for future use
+            //check for bug
+            await _cache.SetStringAsync(cacheKey, stres);
+
+            _methodResult.Result = stres;
+            return _methodResult;
+
         }
         
         public async Task Create(Herobio hero)
