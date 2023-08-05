@@ -22,8 +22,7 @@ namespace WebApplication1.Services
         {
             int incomingid = this.userid;
             string incomingname = this.username;
-            if (incomingid != null)
-            {
+          
                 // Make an HTTP GET request to the API
                 var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/" + incomingid + "/biography");
                 var content = await response.Content.ReadAsStringAsync();
@@ -31,16 +30,17 @@ namespace WebApplication1.Services
                 var myheroObj = JsonConvert.DeserializeObject<Herobio>(content);
 
                 return myheroObj;
-            }
-            else
+            
+           /* else
             {
-                var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/" + incomingname + "/biography");
+                var response = await _httpClient.GetAsync("https://superheroapi.com/api/956111282311222/search/" + incomingname + "");
+                *//* var response = await _httpClient.GetAsync("https://www.superheroapi.com/api.php/956111282311222/search/A-bomb");*//*
                 var content = await response.Content.ReadAsStringAsync();
 
                 var myheroObj = JsonConvert.DeserializeObject<Herobio>(content);
                 return myheroObj;
             }
-           
+           */
 
 
 

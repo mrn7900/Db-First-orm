@@ -56,34 +56,42 @@ namespace WebApplication1.Services
         public async Task<IMethodResult> GetByName(string name)
         {
             var res = _heroRepo.GetHeroName(name);
+            if(res.Result.Count != 0)
             _methodResult.Result = res;
-            if (res.Result == null)
+            else
+            if (res.Result.Count == 0)
             {
-                _heroApiService.username = name;
-                var ApiTbl = await _heroApiService.Get();
-                if (ApiTbl.id == 0)
-                {
-                    var show = _heroRepo.GetHeroName(name);
-                    _methodResult.Result = show;
-                    return _methodResult;
+                //returns error => not found in db
+                var show = _heroRepo.GetHeroName(name);
+                var ex = _heroRepo.exeption;
+                _methodResult.Errors = ex;
+                return _methodResult;
+                /*  _heroApiService.username = name;
+                  var ApiTbl = await _heroApiService.Get();
+                  if (ApiTbl.id == 0)
+                  {
+                      var show = _heroRepo.GetHeroName(name);
+                      var ex = _heroRepo.exeption;
+                      _methodResult.Errors = ex;
+                      return _methodResult;
 
-                }
-                else
-                {
-                    //control try catch
-                    _heroRepo.CreateHero(ApiTbl);
-                    var ex = _heroRepo.exeption;
-                    if (ex == null)
-                    {
-                        var show1 = _heroRepo.GetHeroName(name);
-                        _methodResult.Result = show1;
-                        return _methodResult;
-                    }
-                    else
+                  }*/
+                /*  else
+                  {
+                      //control try catch
+                      _heroRepo.CreateHero(ApiTbl);
+                      var ex = _heroRepo.exeption;
+                      if (ex == null)
+                      {
+                          var show1 = _heroRepo.GetHeroName(name);
+                          _methodResult.Result = show1;
+                          return _methodResult;
+                      }
+                      else
 
-                        _methodResult.Errors = ex;
-                    return _methodResult;
-                }
+                          _methodResult.Errors = ex;
+                      return _methodResult;
+                  }*/
             }
             return _methodResult;
         }

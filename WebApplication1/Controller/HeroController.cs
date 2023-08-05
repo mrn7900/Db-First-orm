@@ -21,7 +21,7 @@ namespace WebApplication1.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<Herobio>> GetHero(int id)
         {
-            //The method will search db by id, if there was requested data it will return it else it will use incoming Api to get and set data in database
+            //The method will search db by id, if there was requested data it will return it else it will use incoming Api to get and set data in database.
             var res = await _heroService.GetHero(id);
                 if(res.Result == null)
                 return NotFound();
@@ -32,7 +32,7 @@ namespace WebApplication1.Controller
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Herobio>> GetHeroByName(string name)
         {
-            //The method will search db by name, if there was requested data it will return it else it will use incoming Api to get and set data in database
+            //The method will search db by name, if there was requested data it will return it .
             var res = await _heroService.GetByName(name);
             if (res == null)
                 return NotFound();
