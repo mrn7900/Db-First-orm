@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using WebApplication1.Models;
 using WebApplication1.Properties;
 using WebApplication1.Repos;
@@ -58,7 +59,7 @@ namespace WebApplication1.Services
 
         public async Task<IMethodResult> GetByName(string name)
         {
-            var res = _heroRepo.GetHeroName(name);
+            var res =  _heroRepo.GetHeroName(name);
             if(res.Result.Count != 0)
             _methodResult.Result = res;
             else
@@ -69,6 +70,8 @@ namespace WebApplication1.Services
                 var ex = _heroRepo.exeption;
                 _methodResult.Errors = ex;
                 return _methodResult;
+
+
                 /*  _heroApiService.username = name;
                   var ApiTbl = await _heroApiService.Get();
                   if (ApiTbl.id == 0)
@@ -106,28 +109,37 @@ namespace WebApplication1.Services
             return await show;
         }
         
-/*        public async Task<List<Herobio>> Get()*/
         public async Task<IMethodResult> Get()
         {
-            //first checking if cached data exist 
-            string cacheKey = "HeroTable";
-            var cachedData = await _cache.GetStringAsync(cacheKey);
+            string cacheKey = "herolist";
+            string cachedData = await _cache.GetStringAsync(cacheKey);
+
             if (cachedData != null)
             {
+                // Cache hit, return cached data
+
                 _methodResult.Result = cachedData;
+                var show = JsonConvert.DeserializeObject<List<Herobio>>(cachedData);
+                _methodResult.Result = show;
                 return _methodResult;
             }
+
+            // Cache miss, fetch data from database or any other source
             var data = await _heroRepo.GetHeros();
-            string stres = String.Join(",", data);
-            // Store data in cache for future use
-            //check for bug
-            await _cache.SetStringAsync(cacheKey, stres);
 
-            _methodResult.Result = stres;
+            
+                // Store data in cache for future use
+                await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(data), new DistributedCacheEntryOptions
+             {
+                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Set cache expiration time
+             });
+
+             _methodResult.Result = data;
+
             return _methodResult;
-
+ 
         }
-        
+
         public async Task Create(Herobio hero)
         {
             _heroRepo.CreateHero(hero);

@@ -33,8 +33,8 @@ try
     builder.Services.AddScoped<IMethodResult, MethodResult>();
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = "localhost:6379,password=3"; // Replace with your Redis server connection string
-        options.InstanceName = "SampleInstance"; // Replace with a unique instance name
+        options.Configuration = "localhost:6379"; // Replace with your Redis server connection string
+        /*options.InstanceName = "SampleInstance"; // Replace with a unique instance name*/
     });
 
     //add DI of NLog

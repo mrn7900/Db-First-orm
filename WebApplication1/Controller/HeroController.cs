@@ -44,7 +44,7 @@ namespace WebApplication1.Controller
         [HttpGet]
         public async Task<ActionResult<List<Herobio>>> Get()
         {   
-            return Ok(_heroService.Get());
+            return Ok(await _heroService.Get());
         }
 
         [HttpPost]

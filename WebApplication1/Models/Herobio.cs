@@ -8,8 +8,9 @@ namespace WebApplication1.Models
 {
     public partial class Herobio
     {
-      
+
         //public string response { get; set; }
+        //public List<string> result { get; set; }
         public int id { get; set; }
         public string name { get; set; }
 
