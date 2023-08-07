@@ -54,7 +54,7 @@ namespace WebApplication1.Controller
             var userid = await _heroService.GetHeroDB(Hero.id);
             if (userid == null)
             {
-                _heroService.Create(Hero);
+               await _heroService.Create(Hero);
                 return Ok(_heroService.Get());
             }
             else
@@ -65,7 +65,7 @@ namespace WebApplication1.Controller
         [HttpPut]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
-            var res = _heroService.Update(Req);
+            var res = await _heroService.Update(Req);
             if (res.Result == null)
                 return NotFound();
             else
@@ -75,11 +75,11 @@ namespace WebApplication1.Controller
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {
-            var res = _heroService.Delete(id);
+            var res = await _heroService.Delete(id);
             if (res == null)
                 return NotFound();
             else
-            return Ok(_heroService.Get());
+            return Ok(await _heroService.Get());
         }
     }
 }

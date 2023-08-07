@@ -12,7 +12,7 @@ namespace WebApplication1.Services
         public Task<Herobio> GetHeroDB(int id);
         /*public Task<List<Herobio>> Get();*/
         public Task<IMethodResult> Get();
-        public Task Delete(int id);
-        public Task<List<Herobio>> Update(Herobio hero);
+        public Task<IMethodResult> Delete(int id);
+        public Task<IMethodResult> Update(Herobio hero);
     }
 }

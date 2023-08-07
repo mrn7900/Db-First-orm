@@ -7,6 +7,7 @@ using WebApplication1.Repos;
 
 namespace WebApplication1.Services
 {
+    //داکیومنت روی سواگر ، داکیومنت عادی ، سرویس ردیس
     public class HeroService : IHeroService
     {
         private readonly IHeroApiService _heroApiService;
@@ -24,38 +25,100 @@ namespace WebApplication1.Services
         public async Task<IMethodResult> GetHero(int id)
         {
             //The method will search db, if there was requested (by Id) data it will return it else it will use incoming Api to get and set data in database
-            var res = _heroRepo.GetHeroTbl(id);
-            _methodResult.Result = res;
-            if (res.Result == null)
-            {
-                _heroApiService.userid = id;
-                var ApiTbl = await _heroApiService.Get();
-                if (ApiTbl.id == 0)
+           
+                var res = await _heroRepo.GetHeroTbl(id);
+                _methodResult.Result = res;
+                if (res == null)
                 {
-                    var show = _heroRepo.GetHeroTbl(id);
-                    _methodResult.Result = show;
-                    return _methodResult;
-                    
-                }
-                else
-                {
-                    //control try catch
-                    _heroRepo.CreateHero(ApiTbl);
-                    var ex = _heroRepo.exeption;
-                    if (ex == null)
+                    _heroApiService.userid = id;
+                    var ApiTbl = await _heroApiService.Get();
+                    if (ApiTbl.id == 0)
                     {
-                        var show1 = _heroRepo.GetHeroTbl(id);
-                        _methodResult.Result = show1;
+                        var show = _heroRepo.GetHeroTbl(id);
+                        _methodResult.Result = show;
                         return _methodResult;
+
                     }
                     else
+                    {
+                        //control try catch
+                        _heroRepo.CreateHero(ApiTbl);
+                        var ex = _heroRepo.exeption;
+                        if (ex == null)
+                        {
+                            var show1 = await _heroRepo.GetHeroTbl(id);
+                            _methodResult.Result = show1;
+                            return _methodResult;
+                        }
+                        else
 
-                        _methodResult.Errors = ex;
-                    return _methodResult;
+                            _methodResult.Errors = ex;
+                        return _methodResult;
+                    
                 }
             }
             return _methodResult;
         }
+        public async Task<IMethodResult> Update(Herobio hero)
+        {
+            //This method will check DB at first .if there is a data it will update it.
+
+            var res = await _heroRepo.GetHeroTbl(hero.id);
+            if (res == null)
+            {
+                return null;
+            }
+            var data = await _heroRepo.Update(hero);
+
+            //start caching check (redis db)
+            string cacheKey = "herolist";
+            string cachedData = await _cache.GetStringAsync(cacheKey);
+           
+                // fetch data from database or any other source
+                var data1 = await _heroRepo.GetHeros();
+
+                // Store data in cache for future use
+                await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(data1), new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Set cache expiration time
+                });
+     
+                _methodResult.Result = data;
+            return _methodResult;
+           
+        }
+
+        public async Task<IMethodResult> Get()
+        {
+            //start caching check (redis db)
+            string cacheKey = "herolist";
+            string cachedData = await _cache.GetStringAsync(cacheKey);
+
+            if (cachedData != null)
+            {
+                // Cache hit, return cached data
+                _methodResult.Result = cachedData;
+                var show = JsonConvert.DeserializeObject<List<Herobio>>(cachedData);
+                _methodResult.Result = show;
+                return _methodResult;
+            }
+
+            // Cache miss, fetch data from database or any other source
+            var data = await _heroRepo.GetHeros();
+
+
+            // Store data in cache for future use
+            await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(data), new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Set cache expiration time
+            });
+
+            _methodResult.Result = data;
+
+            return _methodResult;
+
+        }
+
 
         public async Task<IMethodResult> GetByName(string name)
         {
@@ -109,71 +172,38 @@ namespace WebApplication1.Services
             return await show;
         }
         
-        public async Task<IMethodResult> Get()
-        {
-            string cacheKey = "herolist";
-            string cachedData = await _cache.GetStringAsync(cacheKey);
-
-            if (cachedData != null)
-            {
-                // Cache hit, return cached data
-
-                _methodResult.Result = cachedData;
-                var show = JsonConvert.DeserializeObject<List<Herobio>>(cachedData);
-                _methodResult.Result = show;
-                return _methodResult;
-            }
-
-            // Cache miss, fetch data from database or any other source
-            var data = await _heroRepo.GetHeros();
-
-            
-                // Store data in cache for future use
-                await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(data), new DistributedCacheEntryOptions
-             {
-                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Set cache expiration time
-             });
-
-             _methodResult.Result = data;
-
-            return _methodResult;
- 
-        }
-
         public async Task Create(Herobio hero)
         {
             _heroRepo.CreateHero(hero);
         }
         
-        public  Task Delete(int id)
+        public async Task<IMethodResult> Delete(int id)
         {
             //This method will check DB at first .if there is a data it will wipe it.
-            var res = _heroRepo.GetHeroTbl(id);
-            if (res.Result == null)
+            var res = await _heroRepo.GetHeroTbl(id);
+            if (res == null)
             {
                 return null;
             }
             else
             {
                 _heroRepo.DeleteHero(id);
-                return _heroRepo.GetHeroTbl(id);
+
+                //start caching check (redis db)
+                string cacheKey = "herolist";
+                string cachedData = await _cache.GetStringAsync(cacheKey);
+
+                // fetch data from database or any other source
+                var data1 = await _heroRepo.GetHeros();
+
+                // Store data in cache for future use
+                await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(data1), new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Set cache expiration time
+                });
+                _methodResult.Result = await _heroRepo.GetHeroTbl(id);
+                return _methodResult;
             }
-        }
-        
-        public async Task GetHeros()
-        {
-            _heroRepo.GetHeros();
-        }
-        
-        public async Task<List<Herobio>> Update(Herobio hero)
-        {
-            //This method will check DB at first .if there is a data it will update it.
-            var res = _heroRepo.GetHeroTbl(hero.id);
-            if (res.Result == null)
-            {
-                return null;
-            }
-            return await _heroRepo.Update(hero);
         }
     }
 }
