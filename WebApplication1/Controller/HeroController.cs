@@ -54,8 +54,8 @@ namespace WebApplication1.Controller
             var userid = await _heroService.GetHeroDB(Hero.id);
             if (userid == null)
             {
-               await _heroService.Create(Hero);
-                return Ok(_heroService.Get());
+                await _heroService.Create(Hero);
+                return Ok();
             }
             else
                 return BadRequest("Doublicate Enterance(check id)");
@@ -66,7 +66,7 @@ namespace WebApplication1.Controller
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
             var res = await _heroService.Update(Req);
-            if (res.Result == null)
+            if (res == null)
                 return NotFound();
             else
                 return Ok(res);

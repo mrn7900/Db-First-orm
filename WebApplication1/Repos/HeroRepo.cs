@@ -16,7 +16,7 @@ namespace WebApplication1.Repos
         }
 
         public string exeption{ get; set; }
-      
+
         public async void CreateHero(Herobio hero)
         {
             //add try catch
@@ -42,13 +42,12 @@ namespace WebApplication1.Repos
         public async Task<List<Herobio>> GetHeroName(string name)
         {
             //it will search in db and returns everything that starts with that inputed name 
-            string lowerCaseStartingName = name.ToLower();
-
+            
             var hero = await _context.Herobios.Where(x => x.name.ToLower().StartsWith(name)).ToListAsync();
             
             if (hero.Count == 0)
             {
-                exeption = "the name doesnt exist in database";
+                exeption = "the name does not exist in database";
             }
             return hero;
         }

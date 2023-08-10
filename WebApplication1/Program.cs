@@ -31,6 +31,7 @@ try
     builder.Services.AddScoped<IHeroService, HeroService>();
     builder.Services.AddScoped<IHeroRepo, HeroRepo>();
     builder.Services.AddScoped<IMethodResult, MethodResult>();
+    builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
     builder.Services.AddStackExchangeRedisCache(options =>
     {
         options.Configuration = "localhost:6379"; // Replace with your Redis server connection string
