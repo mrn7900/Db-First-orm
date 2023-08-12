@@ -36,7 +36,7 @@ namespace WebApplication1.Services
                     var ApiTbl = await _heroApiService.Get();
                     if (ApiTbl.id == 0)
                     {
-                        var show = _heroRepo.GetHeroTbl(id);
+                        var show = await _heroRepo.GetHeroTbl(id);
                         _methodResult.Result = show;
                         return _methodResult;
 
@@ -45,7 +45,8 @@ namespace WebApplication1.Services
                     {
                         //control try catch
                         _heroRepo.CreateHero(ApiTbl);
-                        var ex = _heroRepo.exeption;
+                     await _redisCache.cache();
+                     var ex = _heroRepo.exeption;
                         if (ex == null)
                         {
                             var show1 = await _heroRepo.GetHeroTbl(id);
@@ -132,6 +133,7 @@ namespace WebApplication1.Services
         public async Task Create(Herobio hero)
         {
             _heroRepo.CreateHero(hero);
+            await _redisCache.cache();
         }
 
         public async Task<IMethodResult> Delete(int id)

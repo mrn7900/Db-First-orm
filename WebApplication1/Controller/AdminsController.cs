@@ -11,7 +11,7 @@ namespace WebApplication1.Controller
     [ApiController]
     public class AdminsController : ControllerBase
     {
-        //add NLog and context
+       /* //add NLog and context
         private readonly ILogger<AdminsController> _logger;
         private readonly testContext _Context;
         public AdminsController(testContext context, ILogger<AdminsController> logger)
@@ -66,7 +66,7 @@ namespace WebApplication1.Controller
             _Context.Admins.Remove(dbHero);
             await _Context.SaveChangesAsync();
             return Ok(await _Context.Admins.ToListAsync());
-        }
+        }*/
 
     }
 }

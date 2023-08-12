@@ -17,18 +17,30 @@ namespace WebApplication1.Controller
         {
             _heroService = heroService;
         }
-       
+        /// <summary>
+        /// Searches with id. 
+        /// </summary>
+        /// <remarks>
+        /// first it will search in db,if there were requested record it will show it else it uses SuperHero API Service (online) for search. if there were data it will save it in db and cache then show it.
+        /// </remarks>
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Herobio>> GetHero(int id)
         {
             //The method will search db by id, if there was requested data it will return it else it will use incoming Api to get and set data in database.
             var res = await _heroService.GetHero(id);
-                if(res.Result == null)
+                if(res.Result == null && res.Errors == null)
                 return NotFound();
                  else
                 return Ok(res);
 
         }
+        /// <summary>
+        /// Searches with name in db. 
+        /// </summary>
+        /// <remarks>
+        /// it will searches for record by name in db. 
+        /// </remarks>
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Herobio>> GetHeroByName(string name)
         {
@@ -40,13 +52,23 @@ namespace WebApplication1.Controller
                 return Ok(res);
 
         }
-
+        /// <summary>
+        /// Returns all records in table. 
+        /// </summary>
+        /// <remarks>
+        /// it will returns all records from db then it will update the cache.
+        /// </remarks>
         [HttpGet]
         public async Task<ActionResult<List<Herobio>>> Get()
         {   
             return Ok(await _heroService.Get());
         }
-
+        /// <summary>
+        /// You can add record manually.  
+        /// </summary>
+        /// <remarks>
+        /// it will add entered record to db then it will update the cache.
+        /// </remarks>
         [HttpPost]
         public async Task<ActionResult<List<Herobio>>> Post(Herobio Hero)
         {
@@ -61,7 +83,12 @@ namespace WebApplication1.Controller
                 return BadRequest("Doublicate Enterance(check id)");
 
         }
-
+        /// <summary>
+        /// You can change and update records manually.  
+        /// </summary>
+        /// <remarks>
+        /// it will update entered record to db then it will update the cache.
+        /// </remarks>
         [HttpPut]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
@@ -71,7 +98,12 @@ namespace WebApplication1.Controller
             else
                 return Ok(res);
         }
-      
+        /// <summary>
+        /// You can delete record manually.  
+        /// </summary>
+        /// <remarks>
+        /// it will delete entered record from db then it will update the cache.
+        /// </remarks>
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {

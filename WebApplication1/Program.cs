@@ -5,6 +5,8 @@ using WebApplication1.Models;
 using WebApplication1.Services;
 using WebApplication1.Repos;
 using WebApplication1.Properties;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 
 //for NLog, use the main docs and dont copy try catch from doc(write it by yourself to work normaly)
@@ -20,10 +22,30 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    //builder.Services.AddTransient<MySqlConnection>(_ =>
-    //  new MySqlConnection("Server=127.0.0.1;Port=3306;Database=test;Uid=root;Pwd=12345678;"));
-
-    //change packages to danial project
+    //config swagger description 
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Version = "v1",
+            Title = "Hero API",
+            Description = "An ASP.NET Core Web API that works with an incoming API that provide data about heros. this API can use for providing data about heros for library apps.",
+      /*      TermsOfService = new Uri("https://example.com/terms"),
+            Contact = new OpenApiContact
+            {
+                Name = "Example Contact",
+                Url = new Uri("https://example.com/contact")
+            },
+            License = new OpenApiLicense
+            {
+                Name = "Example License",
+                Url = new Uri("https://example.com/license")
+            }*/
+        });
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    });
+   
     //first have to install pomelo packages,then scafold.after scafolding with pomelo,it dosent work in API so need to delete pomelos and install microssft Core packages
     //then chenge context and program.cs(DI) to working with microsoft pakcages 
     builder.Services.AddDbContext<testContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("db")));

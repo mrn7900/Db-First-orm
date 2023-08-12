@@ -13,7 +13,7 @@ namespace WebApplication1.Controller
     [Route("api/[controller]")]
     [ApiController]
     public class FreeApiController : ControllerBase
-    {
+    {/*
         //add NLog and context
         private readonly ILogger<AdminsController> _logger;
         private readonly HttpClient _httpClient;
@@ -45,7 +45,7 @@ namespace WebApplication1.Controller
 
             return BadRequest();
         }
-
+*/
 
     }
 }
