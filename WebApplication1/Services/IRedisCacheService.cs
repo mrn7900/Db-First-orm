@@ -2,6 +2,7 @@
 {
     public interface IRedisCacheService
     {
-        public Task cache();
+        public Task cachebyid(int id);
+        public Task cachebyname(string name);
     }
 }

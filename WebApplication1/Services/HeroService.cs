@@ -26,9 +26,28 @@ namespace WebApplication1.Services
         //IMethodResult service will return a Object and a string(for error) 
         public async Task<IMethodResult> GetHero(int id)
         {
-            //The method will search db, if there was requested (by Id) data it will return it else it will use incoming Api to get and set data in database
+            //first the method will search redis for cache if the cache was null ,it will search db, if there was requested (by Id) data it will return it else it will use incoming Api to get and set data in database
+            //start caching check (redis db)
+            string cacheKey = "herolist";
+            string cachedData = await _cache.GetStringAsync(cacheKey);
+            if (cachedData != null)
+            { // Cache hit, return cached data
+
+                var showcache = JsonConvert.DeserializeObject<Herobio>(cachedData);
+                if (showcache != null)
+                {
+                    if (showcache.id == id)
+                    {
+                        _methodResult.Result = showcache;
+                        return _methodResult;
+                    }
+                }
+
+            }
            
+            
                 var res = await _heroRepo.GetHeroTbl(id);
+                await _redisCache.cachebyid(id);
                 _methodResult.Result = res;
                 if (res == null)
                 {
@@ -45,8 +64,8 @@ namespace WebApplication1.Services
                     {
                         //control try catch
                         _heroRepo.CreateHero(ApiTbl);
-                     await _redisCache.cache();
-                     var ex = _heroRepo.exeption;
+                        await _redisCache.cachebyid(id);
+                        var ex = _heroRepo.exeption;
                         if (ex == null)
                         {
                             var show1 = await _heroRepo.GetHeroTbl(id);
@@ -57,11 +76,13 @@ namespace WebApplication1.Services
 
                             _methodResult.Errors = ex;
                         return _methodResult;
-                    
+
+                    }
                 }
-            }
-            return _methodResult;
+                return _methodResult;
         }
+          
+
         public async Task<IMethodResult> Update(Herobio hero)
         {
             //This method will check DB at first .if there is a data it will update it.
@@ -74,7 +95,7 @@ namespace WebApplication1.Services
             var data = await _heroRepo.Update(hero);
 
           
-            await _redisCache.cache();
+            await _redisCache.cachebyid(hero.id);
 
             _methodResult.Result = data;
             return _methodResult;
@@ -83,21 +104,9 @@ namespace WebApplication1.Services
 
         public async Task<IMethodResult> Get()
         {
-            //start caching check (redis db)
-            string cacheKey = "herolist";
-            string cachedData = await _cache.GetStringAsync(cacheKey);
-
-            if (cachedData != null)
-            {
-                // Cache hit, return cached data
-                _methodResult.Result = cachedData;
-                var show = JsonConvert.DeserializeObject<List<Herobio>>(cachedData);
-                _methodResult.Result = show;
-                return _methodResult;
-            }
+           
             var data = await _heroRepo.GetHeros();
-          
-            await _redisCache.cache();
+
             _methodResult.Result = data;
 
             return _methodResult;
@@ -109,7 +118,11 @@ namespace WebApplication1.Services
         {
             var res = await _heroRepo.GetHeroName(name);
             if(res.Count != 0)
-            _methodResult.Result = res;
+            {
+                await _redisCache.cachebyname(name);
+                _methodResult.Result = res;
+            }
+
             else
             if (res.Count == 0)
             {
@@ -125,7 +138,7 @@ namespace WebApplication1.Services
        
         public async Task<Herobio> GetHeroDB(int id)
         {
-            //just for checking db
+            //get by id ,just for checking db not online api
             var show = _heroRepo.GetHeroTbl(id);
             return await show;
         }
@@ -133,24 +146,16 @@ namespace WebApplication1.Services
         public async Task Create(Herobio hero)
         {
             _heroRepo.CreateHero(hero);
-            await _redisCache.cache();
+            await _redisCache.cachebyid(hero.id);
         }
 
-        public async Task<IMethodResult> Delete(int id)
+        public async Task Delete(int id)
         {
             //This method will check DB at first .if there is a data it will wipe it.
-            var res = await _heroRepo.GetHeroTbl(id);
-            if (res == null)
-            {
-                return null;
-            }
-            else
-            {
-                _heroRepo.DeleteHero(id);
-                await _redisCache.cache();
-                _methodResult.Result = await _heroRepo.GetHeroTbl(id);
-                return _methodResult;
-            }
+            
+             _heroRepo.DeleteHero(id);
+            string cacheKey = "herolist";
+           await _cache.RemoveAsync(cacheKey);
         }
     }
 }

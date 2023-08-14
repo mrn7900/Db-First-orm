@@ -18,10 +18,10 @@ namespace WebApplication1.Controller
             _heroService = heroService;
         }
         /// <summary>
-        /// Searches with id. 
+        /// Get with id. 
         /// </summary>
         /// <remarks>
-        /// first it will search in db,if there were requested record it will show it else it uses SuperHero API Service (online) for search. if there were data it will save it in db and cache then show it.
+        /// first it will search redis for cache if the cache was null ,it will search db,if there were requested record it will show it else it uses SuperHero API Service (online) for search. if there were data it will save it in db and cache then show it.
         /// </remarks>
 
         [HttpGet("{id}")]
@@ -30,7 +30,7 @@ namespace WebApplication1.Controller
             //The method will search db by id, if there was requested data it will return it else it will use incoming Api to get and set data in database.
             var res = await _heroService.GetHero(id);
                 if(res.Result == null && res.Errors == null)
-                return NotFound();
+                return NotFound("Can't find the requested record in db!");
                  else
                 return Ok(res);
 
@@ -39,15 +39,15 @@ namespace WebApplication1.Controller
         /// Searches with name in db. 
         /// </summary>
         /// <remarks>
-        /// it will searches for record by name in db. 
+        /// it will searches for record by name in db and cache. 
         /// </remarks>
-        [HttpGet("name/{name}")]
+        [HttpGet("getbyname/{name}")]
         public async Task<ActionResult<Herobio>> GetHeroByName(string name)
         {
             //The method will search db by name, if there was requested data it will return it .
             var res = await _heroService.GetByName(name);
             if (res == null)
-                return NotFound();
+                return NotFound("Can't find the requested record in db!");
             else
                 return Ok(res);
 
@@ -56,7 +56,7 @@ namespace WebApplication1.Controller
         /// Returns all records in table. 
         /// </summary>
         /// <remarks>
-        /// it will returns all records from db then it will update the cache.
+        /// it will returns all records from db.
         /// </remarks>
         [HttpGet]
         public async Task<ActionResult<List<Herobio>>> Get()
@@ -77,10 +77,10 @@ namespace WebApplication1.Controller
             if (userid == null)
             {
                 await _heroService.Create(Hero);
-                return Ok();
+                return Ok("New record created successfully!");
             }
             else
-                return BadRequest("Doublicate Enterance(check id)");
+                return BadRequest("Doublicate enterance!(Check id)");
 
         }
         /// <summary>
@@ -94,7 +94,7 @@ namespace WebApplication1.Controller
         {
             var res = await _heroService.Update(Req);
             if (res == null)
-                return NotFound();
+                return NotFound("Can't find the requested record in db!");
             else
                 return Ok(res);
         }
@@ -102,16 +102,18 @@ namespace WebApplication1.Controller
         /// You can delete record manually.  
         /// </summary>
         /// <remarks>
-        /// it will delete entered record from db then it will update the cache.
+        /// it will delete entered record from db.
         /// </remarks>
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {
-            var res = await _heroService.Delete(id);
+            var res = await _heroService.GetHeroDB(id);
+            await _heroService.Delete(id);
+            
             if (res == null)
-                return NotFound();
+                return NotFound("Can't find the requested record in db!");
             else
-            return Ok(await _heroService.Get());
+            return Ok("Delete was success!");
         }
     }
 }
