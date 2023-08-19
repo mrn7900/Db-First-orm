@@ -73,11 +73,14 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+    }else if (app.Environment.IsProduction())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
 
-    app.UseAuthorization();
+    /*app.UseAuthorization();*/
 
     app.MapControllers();
 

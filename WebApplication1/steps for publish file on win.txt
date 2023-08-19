@@ -1,4 +1,16 @@
-﻿{
+in program.cs: 
+ // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }else if (app.Environment.IsProduction())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+2. in lunchsetting.json:
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -39,3 +51,6 @@
       }
     }
 }
+3.install SDK
+4.command in cmd:
+dotnet publish --configuration Release --output <publish-folder-path> or dotnet publish -c Release -r win-x64 --self-contained true

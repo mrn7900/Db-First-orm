@@ -58,7 +58,7 @@ namespace WebApplication1.Controller
         /// <remarks>
         /// it will returns all records from db.
         /// </remarks>
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<ActionResult<List<Herobio>>> Get()
         {   
             return Ok(await _heroService.Get());
@@ -89,7 +89,7 @@ namespace WebApplication1.Controller
         /// <remarks>
         /// it will update entered record to db then it will update the cache.
         /// </remarks>
-        [HttpPut]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult<List<Herobio>>> Update(Herobio Req)
         {
             var res = await _heroService.Update(Req);
@@ -104,7 +104,7 @@ namespace WebApplication1.Controller
         /// <remarks>
         /// it will delete entered record from db.
         /// </remarks>
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult<List<Herobio>>> Delete(int id)
         {
             var res = await _heroService.GetHeroDB(id);
