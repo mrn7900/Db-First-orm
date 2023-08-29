@@ -7,6 +7,7 @@ using WebApplication1.Repos;
 using WebApplication1.Properties;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using HeroApi.middleware;
 
 
 //for NLog, use the main docs and dont copy try catch from doc(write it by yourself to work normaly)
@@ -56,7 +57,7 @@ try
     builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = "localhost:6379"; // Replace with your Redis server connection string
+        options.Configuration = "redis-container:6379"; // Replace with your Redis server connection string
         /*options.InstanceName = "SampleInstance"; // Replace with a unique instance name*/
     });
 
@@ -64,21 +65,34 @@ try
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
 
+    builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
 
 
     var app = builder.Build();
+
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-    }else if (app.Environment.IsProduction())
+       
+    }
+    else if (app.Environment.IsProduction())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
 
+
+    app.UseExceptionHandler("/error");
+    app.UseStatusCodePagesWithReExecute("/error/{0}");
+    app.UseHsts();
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 
     /*app.UseAuthorization();*/
 

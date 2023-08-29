@@ -1,0 +1,31 @@
+for making image of project:
+docker-compose up --build 
+
+for making mysql image:
+docker pull mysql:latest
+docker run --name=mysql -d mysql/mysql-server:latest
+
+for making redis image:
+docker pull redis:latest
+
+for network checking:
+docker inspect api-container -f "{{json .NetworkSettings.Networks }}"
+
+for opening mysql cli:
+docker exec -it fc36f55cfaa9c8b40c1ff1cacecc63f8d94ed8e6692759249374fcadb8e51e07 mysql -u root -p
+
+for making project container:
+docker run --name api-container --network=mynetwork -p 5000:80 -d webapplication1-web:latest
+
+for making mysql container:
+docker run --name mysql-container --network=mynetwork -e MYSQL_ROOT_PASSWORD=password -p 3307:3306 -d mysql
+
+for making redis container:
+docker run --name redis-container --network=mynetwork -p 6379 -d redis
+
+for connecting mysql in docker to workbench:
+use 3307:3306 port 
+
+connection string when both of project and mysql are in one bridge network:
+use mysql container name as serve name.
+"server=mysql-container;port=3306;database=test;uid=root;pwd=password"
