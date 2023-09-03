@@ -29,3 +29,12 @@ use 3307:3306 port
 connection string when both of project and mysql are in one bridge network:
 use mysql container name as serve name.
 "server=mysql-container;port=3306;database=test;uid=root;pwd=password"
+
+making sqlserver-container:
+docker run --name sqlserver-container --network=mynetwork -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Sa123456789" -p 14330:1433 -d mcr.microsoft.com/mssql/server
+
+    for working with auth in development:
+        "ConnStr": "Data Source=127.0.0.1,14330;Initial Catalog=Metchan;User ID=sa;Password=Sa123456789"
+    for working with auth in docker:
+        "ConnStr": "Data Source=sqlserver-container,14330;Initial Catalog=Metchan;User ID=sa;Password=Sa123456789"
+
