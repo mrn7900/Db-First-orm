@@ -76,7 +76,6 @@ try
     });
     });
 
- 
 
     //first have to install pomelo packages,then scafold.after scafolding with pomelo,it dosent work in API so need to delete pomelos and install microssft Core packages
     //then chenge context and program.cs(DI) to working with microsoft pakcages 
