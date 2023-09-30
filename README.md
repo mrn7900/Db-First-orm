@@ -7,4 +7,6 @@
  Post() : it will add entered record to db then it will update the cache.
  Update() :  it will update entered record to db then it will update the cache.
  Delete() : it will delete entered record from db then it will update the cache.
- Database = MySQL & Cache = Redis
+ Database = MySQL & SqlServer & Cache = Redis
+ there are login (by generating token ) , register , register-admin , refresh token and revoke in auth controller.
+ all of the app is working on docker (follow steps for docker.txt)
